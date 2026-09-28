@@ -1,0 +1,6 @@
+src/config.php
+src/tokens.json
+.env
+*.log
+logs/
+.DS_Store
