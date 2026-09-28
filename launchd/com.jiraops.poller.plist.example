@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Example only. Copy to ~/Library/LaunchAgents/com.jiraops.poller.plist
+  after replacing the two paths below.
+
+  which php     -> ProgramArguments php path
+  whoami        -> the home directory in the script path
+
+  300 seconds = every 5 minutes.
+  The Mac must be awake and online. This does not run on Windows.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.jiraops.poller</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/php</string>
+        <string>/Users/YOUR_MAC_USERNAME/Desktop/Jira-ops/src/poll_jira.php</string>
+    </array>
+
+    <key>StartInterval</key>
+    <integer>300</integer>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/jira-poller.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/jira-poller-error.log</string>
+</dict>
+</plist>

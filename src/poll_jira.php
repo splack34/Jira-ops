@@ -28,37 +28,40 @@ try {
     $sql = "
         INSERT INTO jira_tickets (
             issue_key,
+            project_key,
+            issue_type,
             summary,
             status,
             priority,
             assignee,
+            assignee_account_id,
             created_at,
             updated_at,
             resolved_at,
-            sla_breached,
-            first_response_minutes,
-            resolution_minutes,
             last_synced_at
         )
         VALUES (
             :issue_key,
+            :project_key,
+            :issue_type,
             :summary,
             :status,
             :priority,
             :assignee,
+            :assignee_account_id,
             :created_at,
             :updated_at,
             :resolved_at,
-            NULL,
-            NULL,
-            NULL,
             NOW()
         )
         ON DUPLICATE KEY UPDATE
+            project_key = VALUES(project_key),
+            issue_type = VALUES(issue_type),
             summary = VALUES(summary),
             status = VALUES(status),
             priority = VALUES(priority),
             assignee = VALUES(assignee),
+            assignee_account_id = VALUES(assignee_account_id),
             created_at = VALUES(created_at),
             updated_at = VALUES(updated_at),
             resolved_at = VALUES(resolved_at),
@@ -72,10 +75,13 @@ try {
 
         $stmt->execute([
             ':issue_key' => $issue['key'] ?? null,
+            ':project_key' => $fields['project']['key'] ?? null,
+            ':issue_type' => $fields['issuetype']['name'] ?? null,
             ':summary' => $fields['summary'] ?? null,
             ':status' => $fields['status']['name'] ?? null,
             ':priority' => $fields['priority']['name'] ?? null,
             ':assignee' => $fields['assignee']['displayName'] ?? null,
+            ':assignee_account_id' => $fields['assignee']['accountId'] ?? null,
             ':created_at' => jiraDateToMysql($fields['created'] ?? null),
             ':updated_at' => jiraDateToMysql($fields['updated'] ?? null),
             ':resolved_at' => jiraDateToMysql($fields['resolutiondate'] ?? null),
